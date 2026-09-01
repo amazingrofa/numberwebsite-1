@@ -1,11 +1,89 @@
-﻿<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Page View Counter Example</title>
+
+    <!-- GitHub Markdown CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.9.0/github-markdown.min.css">
+
+    <style>
+        .markdown-body {
+            box-sizing: border-box;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Counter badge styling */
+        .view-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #f6f8fa;
+            border: 1px solid #d0d7de;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-weight: 600;
+            color: #1f2328;
+            margin: 10px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .view-badge {
+                background-color: #161b22;
+                border-color: #30363d;
+                color: #e6edf3;
+            }
+        }
+    </style>
 </head>
 <body>
 
+    <article class="markdown-body">
+        <h1>Welcome to My Project</h1>
+        <p>This page uses <strong>CountAPI</strong> to track dynamic page views without authentication or restrictive rate limits.</p>
+
+        <!-- Display Element for View Counter -->
+        <div class="view-badge">
+            👀 Total Views: <span id="view-count">Loading...</span>
+        </div>
+
+        <h2>Features</h2>
+        <ul>
+            <li>Increments automatically every time the page loads</li>
+            <li>Uses native <code>fetch()</code> in JavaScript</li>
+            <li>Styled with GitHub's design system</li>
+        </ul>
+    </article>
+
+    <script>
+        // Replace "my-unique-github-repo-page" with your unique key/site identifier
+        const UNIQUE_KEY = 'amazingrofa/numberwebsite-1';
+
+        async function updatePageViews() {
+            const countElement = document.getElementById('view-count');
+
+            try {
+                // Sends a request to increment (+1) and return the total count
+                const response = await fetch(`https://countapi.mileshilliard.com/api/v1/hit/${UNIQUE_KEY}`);
+                const data = await response.json();
+
+                // Update HTML text with returned count value
+                if (data && data.value) {
+                    countElement.innerText = Number(data.value).toLocaleString();
+                } else {
+                    countElement.innerText = 'Unavailable';
+                }
+            } catch (error) {
+                console.error('Error fetching view count:', error);
+                countElement.innerText = 'Error';
+            }
+        }
+
+        // Call function on page load
+        updatePageViews();
+    </script>
 </body>
 </html>
