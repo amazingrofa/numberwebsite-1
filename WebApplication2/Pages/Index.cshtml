@@ -1,0 +1,95 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Explore Numbers";
+}
+
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="text-center py-5">
+        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-2 fw-semibold mb-3">
+            Every Number Has a Page
+        </span>
+        <h1 class="display-3 fw-bold mb-3">Find Your Favorite Number</h1>
+        <p class="lead text-muted mx-auto mb-4" style="max-width: 600px;">
+            Type any positive integer to view its dedicated page and real-time view counter.
+        </p>
+
+        <!-- Search Form -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-8 col-lg-6">
+                <form id="numberSearchForm" class="input-group input-group-lg shadow-sm rounded-4 overflow-hidden">
+                    <input type="text"
+                           id="numberInput"
+                           class="form-control border-0 font-monospace px-4"
+                           placeholder="Enter a number (e.g. 42)"
+                           pattern="^(0|[1-9][0-9]*)$"
+                           required
+                           autocomplete="off" />
+                    <button class="btn btn-primary px-4 fw-bold" type="submit">
+                        Go to Page →
+                    </button>
+                </form>
+                <div id="errorMessage" class="text-danger small mt-2 d-none">
+                    Please enter a valid positive integer without leading zeros or letters.
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="d-flex justify-content-center gap-3">
+            <button onclick="goToRandomNumber()" class="btn btn-outline-secondary rounded-pill px-4">
+                🎲 Random Number
+            </button>
+            <a href="/top" class="btn btn-outline-dark rounded-pill px-4">
+                🏆 View Leaderboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="row g-4 py-5 border-top mt-4">
+        <div class="col-md-4 text-center">
+            <div class="p-3">
+                <div class="fs-1 mb-2">⚡</div>
+                <h5 class="fw-bold">Real-time Views</h5>
+                <p class="text-muted small">Live view counts updated instantly using WebSockets and SignalR.</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="p-3">
+                <div class="fs-1 mb-2">♾️</div>
+                <h5 class="fw-bold">Infinite Pages</h5>
+                <p class="text-muted small">Pages are initialized automatically on their very first visit.</p>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <div class="p-3">
+                <div class="fs-1 mb-2">🛡️</div>
+                <h5 class="fw-bold">Spam Protection</h5>
+                <p class="text-muted small">Cookie tracking and rate limiting keep the view counts genuine.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("numberSearchForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const value = document.getElementById("numberInput").value.trim();
+        const errorDiv = document.getElementById("errorMessage");
+
+        // Validate strictly using regex
+        if (/^(0|[1-9][0-9]*)$/.test(value)) {
+            errorDiv.classList.add("d-none");
+            window.location.href = "/" + value;
+        } else {
+            errorDiv.classList.remove("d-none");
+        }
+    });
+
+    function goToRandomNumber() {
+        const randomNum = Math.floor(Math.random() * 1000000) + 1;
+        window.location.href = "/" + randomNum;
+    }
+</script>
